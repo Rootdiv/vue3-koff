@@ -14,7 +14,7 @@ export interface Product {
   category: string;
 }
 
-interface Pagination {
+export interface Pagination {
   currentPage: number;
   totalPages: number;
   totalProducts: number;
