@@ -2,8 +2,9 @@
   import { useCategoriesStore } from '@/stores/categories';
   import { onMounted } from 'vue';
   import { storeToRefs } from 'pinia';
-  import { RouterLink } from 'vue-router';
+  import { RouterLink, useRoute } from 'vue-router';
 
+  const route = useRoute();
   const store = useCategoriesStore();
 
   onMounted(() => {
@@ -18,7 +19,9 @@
     <div class="container catalog__container">
       <ul class="catalog__list">
         <li class="catalog__item" v-for="(category, index) in categories" :key="index">
-          <RouterLink class="catalog__link" :to="`/category?slug=${category}`">
+          <RouterLink
+            :class="['catalog__link', { ['catalog__link_active']: route.query.slug === category }]"
+            :to="`/category?slug=${category}`">
             {{ category }}
           </RouterLink>
         </li>
@@ -57,9 +60,11 @@
       @media (min-width: 580px) {
         padding: 0 29px;
       }
+
       @media (min-width: 820px) {
         padding: 0 43px;
       }
+
       @media (min-width: 1120px) {
         padding: 0 92px;
       }
