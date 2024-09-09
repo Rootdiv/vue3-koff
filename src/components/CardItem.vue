@@ -1,22 +1,22 @@
 <script setup lang="ts">
   import { API_URL } from '@/const';
-  // import { RouterLink } from 'vue-router';
-  import type { Product } from '@/stores/goods';
+  import { RouterLink } from 'vue-router';
+  import type { IProduct } from '@/stores/types';
   import { priceFormat } from '@/helpers/priceFormat';
 
-  const { product } = defineProps<{ product: Product }>();
+  const { product } = defineProps<{ product: IProduct }>();
 </script>
 
 <template>
   <article class="card">
-    <a class="card__link card__link_img" :href="`/product/${product.id}`">
+    <RouterLink class="card__link card__link_img" :to="`/product/${product.id}`">
       <img :src="`${API_URL}/${product.images[0]}`" class="card__img" :alt="product.name" />
-    </a>
+    </RouterLink>
     <div class="card__info">
       <h3 class="card__title">
-        <a :href="`/product/${product.id}`" class="card__link">
+        <RouterLink :to="`/product/${product.id}`" class="card__link">
           {{ product.name }}
-        </a>
+        </RouterLink>
       </h3>
       <p class="card__price">{{ priceFormat(product.price) }}&nbsp;&#8381;</p>
     </div>

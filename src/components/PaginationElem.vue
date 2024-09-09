@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { RouterLink, useRoute } from 'vue-router';
-  import type { Pagination } from '@/stores/goods';
+  import type { IPagination } from '@/stores/goods';
   import { ref } from 'vue';
 
-  const { pagination } = defineProps<{ pagination: Pagination }>();
+  const { pagination } = defineProps<{ pagination: IPagination }>();
   const route = useRoute();
 
   const currentPageNumber = ref(Number(route.query.page) || pagination.currentPage);

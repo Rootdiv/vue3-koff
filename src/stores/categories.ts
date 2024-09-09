@@ -2,23 +2,24 @@ import axios from 'axios';
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { API_URL } from '@/const';
+import { Status } from '@/stores/types';
 
-interface State {
+interface IStateCategory {
   categories: string[];
-  loading: boolean;
+  status: Status;
   error: unknown;
 }
 
 export const useCategoriesStore = defineStore('categories', {
-  state: (): State => ({
+  state: (): IStateCategory => ({
     categories: [],
-    loading: false,
+    status: Status.LOADING,
     error: null,
   }),
   actions: {
     async getCategories() {
       this.categories = [];
-      this.loading = true;
+      this.status = Status.LOADING;
       const auth = useAuthStore();
       const token = auth.accessKey;
       try {
@@ -28,6 +29,7 @@ export const useCategoriesStore = defineStore('categories', {
           },
         });
         this.categories = response.data;
+        this.status = Status.SUCCESS;
       } catch (error) {
         if (axios.isAxiosError(error)) {
           console.error('Произошла ошибка запроса категорий:', error.message);
@@ -36,8 +38,7 @@ export const useCategoriesStore = defineStore('categories', {
           console.error('Произошла ошибка запроса категорий:', error);
           this.error = error;
         }
-      } finally {
-        this.loading = false;
+        this.status = Status.ERROR;
       }
     },
   },

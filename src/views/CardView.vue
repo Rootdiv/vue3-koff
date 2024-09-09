@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import GoodsList from '@/components/GoodsList.vue';
+  import GoodsItem from '@/components/GoodsItem.vue';
 
   defineEmits(['vnode-unmounted']);
 </script>
 
 <template>
-  <GoodsList />
+  <GoodsItem />
 </template>
