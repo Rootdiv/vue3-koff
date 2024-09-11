@@ -3,6 +3,7 @@
   import { RouterLink } from 'vue-router';
   import type { IProduct } from '@/stores/types';
   import { priceFormat } from '@/helpers/priceFormat';
+  import FavoritesButton from '@/components/FavoritesButton.vue';
 
   const { product } = defineProps<{ product: IProduct }>();
 </script>
@@ -21,11 +22,7 @@
       <p class="card__price">{{ priceFormat(product.price) }}&nbsp;&#8381;</p>
     </div>
     <button class="card__btn" type="button" :data-id="product.id">В корзину</button>
-    <button class="card__favorites" type="button" :data-id="product.id">
-      <svg width="16" height="16" class="card__svg">
-        <use href="/img/sprite.svg#favorites"></use>
-      </svg>
-    </button>
+    <FavoritesButton class="card__favorites" :id="product.id" />
   </article>
 </template>
 
@@ -116,17 +113,6 @@
       position: absolute;
       top: 12px;
       right: 12px;
-
-      &:hover,
-      &:focus-visible,
-      &:active,
-      &_active {
-        color: #780096;
-
-        .card__svg {
-          fill: #780096;
-        }
-      }
     }
   }
 </style>

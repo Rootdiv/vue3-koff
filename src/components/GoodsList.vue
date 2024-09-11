@@ -5,24 +5,25 @@
   import { storeToRefs } from 'pinia';
   import { useRoute } from 'vue-router';
   import PaginationElem from '@/components/PaginationElem.vue';
+  import { useFavoritesStore } from '@/stores/favorites';
 
   const route = useRoute();
   const storeGoods = useGoodsStore();
+  const storeFavorites = useFavoritesStore();
 
-  onMounted(() => {
+  const updateGetGoods = () => {
     if (route.path === '/category') {
       storeGoods.getGoods(route.query);
+    } else if (route.path === '/favorites') {
+      storeGoods.getGoods({ list: storeFavorites.favoritesList.join(',') });
     } else {
       storeGoods.getGoods({});
     }
-  });
+  };
 
-  watch(
-    () => route.query,
-    () => {
-      storeGoods.getGoods(route.query);
-    },
-  );
+  onMounted(updateGetGoods);
+
+  watch(route, updateGetGoods);
 
   const { goods, pagination } = storeToRefs(storeGoods);
 </script>
@@ -30,13 +31,21 @@
 <template>
   <section class="goods">
     <div class="container goods__container">
-      <h2 class="visually-hidden">Список товаров</h2>
-      <ul class="goods__list">
+      <h2 :class="['visually-hidden', { goods__title: route.path === '/favorites' }]">
+        {{ route.path === '/favorites' ? 'Избранное' : 'Список товаров' }}
+      </h2>
+      <p v-if="storeGoods.status === 'error'" class="goods__error">
+        Ошибка: {{ storeGoods.error }}
+      </p>
+      <ul class="goods__list" v-if="goods.length">
         <li class="goods__item" v-for="product in goods" :key="product.id">
           <CardItem class="goods__card" :product="product" />
         </li>
       </ul>
       <PaginationElem v-if="pagination && pagination.totalPages > 1" :pagination="pagination" />
+      <p v-else-if="goods.length === 0 && route.path === '/category'" class="goods__empty">
+        Категория не существует
+      </p>
     </div>
   </section>
 </template>

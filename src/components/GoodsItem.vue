@@ -5,6 +5,7 @@
   import { useProductStore } from '@/stores/product';
   import { priceFormat } from '@/helpers/priceFormat';
   import SliderImages from '@/components/SliderImages.vue';
+  import FavoritesButton from '@/components/FavoritesButton.vue';
 
   const route = useRoute();
   const storeProduct = useProductStore();
@@ -46,11 +47,7 @@
         </div>
         <div class="product__btns">
           <button class="product__btn" type="button" :data-id="product.id">В корзину</button>
-          <button class="product__favorites" type="button" :data-id="product.id">
-            <svg width="16" height="16" class="product__svg">
-              <use href="/img/sprite.svg#favorites"></use>
-            </svg>
-          </button>
+          <FavoritesButton class="product__favorites" :id="product.id" />
         </div>
       </div>
     </div>
@@ -152,17 +149,6 @@
     &__favorites {
       width: 16px;
       height: 16px;
-
-      &:hover,
-      &:focus-visible,
-      &:active,
-      &_active {
-        color: #780096;
-
-        .product__svg {
-          fill: #780096;
-        }
-      }
     }
 
     &__empty {
