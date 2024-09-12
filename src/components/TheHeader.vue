@@ -1,27 +1,26 @@
 <script setup lang="ts">
   import { RouterLink } from 'vue-router';
 
+  import TheLogo from '@/components/TheLogo.vue';
   import SearchForm from '@/components/SearchForm.vue';
 </script>
 
 <template>
   <header class="header">
     <div class="container header__container">
-      <RouterLink class="header__link-logo" to="/">
-        <img src="/img/logo.svg" class="header__logo" alt="Логотип мебельного маркета Koff" />
-      </RouterLink>
+      <TheLogo class="header__logo" />
       <SearchForm class="header__search" />
       <nav class="header__control">
         <RouterLink class="header__link" to="/favorites">
           <span class="header__link-text">Избранное</span>
           <svg width="16" height="16" class="header__favorites">
-            <use href="/img/sprite.svg#favorites"></use>
+            <use href="/img/sprite.svg#favorites" />
           </svg>
         </RouterLink>
         <RouterLink class="header__link" to="/cart">
           <span class="header__link-text">Корзина</span><span class="header__count">(0)</span>
           <svg width="16" height="16">
-            <use href="/img/sprite.svg#cart"></use>
+            <use href="/img/sprite.svg#cart" />
           </svg>
         </RouterLink>
       </nav>
@@ -51,11 +50,8 @@
       }
     }
 
-    &__link-logo {
-      grid-area: logo;
-    }
-
     &__logo {
+      grid-area: logo;
       width: 94px;
     }
 

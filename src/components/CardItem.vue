@@ -19,7 +19,7 @@
           {{ product.name }}
         </RouterLink>
       </h3>
-      <p class="card__price">{{ priceFormat(product.price) }}&nbsp;&#8381;</p>
+      <p class="card__price">{{ priceFormat(product.price) }}</p>
     </div>
     <button class="card__btn" type="button" :data-id="product.id">В корзину</button>
     <FavoritesButton class="card__favorites" :id="product.id" />

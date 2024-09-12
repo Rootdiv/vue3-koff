@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { RouterLink } from 'vue-router';
+  import TheLogo from '@/components/TheLogo.vue';
   import TheContacts from '@/components/TheContacts.vue';
   import DeveloperList from '@/components/DeveloperList.vue';
 </script>
@@ -7,12 +7,10 @@
 <template>
   <footer class="footer">
     <div class="container footer__container">
-      <RouterLink class="footer__link-logo" to="/">
-        <img src="/img/logo.svg" class="footer__logo" alt="Логотип мебельного маркета Koff" />
-      </RouterLink>
+      <TheLogo class="footer__logo" />
       <TheContacts class="footer__contacts" />
       <DeveloperList class="footer__developers" />
-      <p class="footer__copyright">© Koff, 2024</p>
+      <p class="footer__copyright">&copy; Koff, 2024</p>
     </div>
   </footer>
 </template>
