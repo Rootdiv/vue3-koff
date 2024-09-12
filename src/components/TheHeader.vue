@@ -1,5 +1,7 @@
 <script setup lang="ts">
   import { RouterLink } from 'vue-router';
+
+  import SearchForm from '@/components/SearchForm.vue';
 </script>
 
 <template>
@@ -8,14 +10,7 @@
       <RouterLink class="header__link-logo" to="/">
         <img src="/img/logo.svg" class="header__logo" alt="Логотип мебельного маркета Koff" />
       </RouterLink>
-      <form class="header__search" method="GET">
-        <input type="search" name="search" placeholder="Введите запрос" class="header__input" />
-        <button type="submit" class="header__btn">
-          <svg width="16" height="16">
-            <use href="/img/sprite.svg#search"></use>
-          </svg>
-        </button>
-      </form>
+      <SearchForm class="header__search" />
       <nav class="header__control">
         <RouterLink class="header__link" to="/favorites">
           <span class="header__link-text">Избранное</span>
@@ -66,63 +61,6 @@
 
     &__search {
       grid-area: search;
-      position: relative;
-      width: 100%;
-      height: 38px;
-
-      @media (min-width: 820px) {
-        max-width: 408px;
-        justify-self: center;
-      }
-
-      @media (min-width: 1120px) {
-        max-width: 514px;
-      }
-    }
-
-    &__input {
-      width: 100%;
-      height: 100%;
-      padding: 0 40px 0 24px;
-      border-radius: 32px;
-      background-color: #eeeff2;
-      border: none;
-
-      &::placeholder,
-      &::placeholder-shown {
-        color: #969eae;
-      }
-
-      &:hover,
-      &:focus-visible {
-        outline: 1px solid #dfe3eb;
-      }
-
-      &::-webkit-search-cancel-button {
-        display: none;
-      }
-    }
-
-    &__btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: 24px;
-      display: block;
-      width: 16px;
-      height: 16px;
-      outline-offset: 4px;
-      outline: 1px solid transparent;
-
-      &:hover,
-      &:active {
-        color: #780096;
-      }
-
-      &:focus-visible {
-        color: #780096;
-        outline-color: #780096;
-      }
     }
 
     &__control {

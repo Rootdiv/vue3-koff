@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import CardItem from '@/components/CardItem.vue';
   import { useGoodsStore } from '@/stores/goods';
-  import { onMounted, watch } from 'vue';
+  import { ref, onMounted, watch } from 'vue';
   import { storeToRefs } from 'pinia';
   import { useRoute } from 'vue-router';
   import PaginationElem from '@/components/PaginationElem.vue';
@@ -11,9 +11,21 @@
   const storeGoods = useGoodsStore();
   const storeFavorites = useFavoritesStore();
 
-  const updateGetGoods = () => {
-    if (route.path === '/category') {
-      storeGoods.getGoods(route.query);
+  const isHiddenTitle = ref(true);
+  const goodsTitle = ref('Список товаров');
+
+  const updateGetGoodsAndTitle = () => {
+    if (route.path === '/search' || route.path === '/favorites') {
+      goodsTitle.value = route.path === '/search' ? 'Результаты поиска:' : 'Избранное';
+      isHiddenTitle.value = false;
+    } else {
+      goodsTitle.value = 'Список товаров';
+      isHiddenTitle.value = true;
+    }
+    if (route.path === '/category' || route.path === '/search') {
+      if (Object.keys(route.query).length && Object.values(route.query)[0] !== '') {
+        storeGoods.getGoods(route.query);
+      }
     } else if (route.path === '/favorites') {
       storeGoods.getGoods({ list: storeFavorites.favoritesList.join(',') });
     } else {
@@ -21,9 +33,9 @@
     }
   };
 
-  onMounted(updateGetGoods);
+  onMounted(updateGetGoodsAndTitle);
 
-  watch(route, updateGetGoods);
+  watch(route, updateGetGoodsAndTitle);
 
   const { goods, pagination } = storeToRefs(storeGoods);
 </script>
@@ -31,8 +43,8 @@
 <template>
   <section class="goods">
     <div class="container goods__container">
-      <h2 :class="['visually-hidden', { goods__title: route.path === '/favorites' }]">
-        {{ route.path === '/favorites' ? 'Избранное' : 'Список товаров' }}
+      <h2 :class="['goods__title', { 'visually-hidden': isHiddenTitle }]">
+        {{ goodsTitle }}
       </h2>
       <p v-if="storeGoods.status === 'error'" class="goods__error">
         Ошибка: {{ storeGoods.error }}
@@ -45,6 +57,9 @@
       <PaginationElem v-if="pagination && pagination.totalPages > 1" :pagination="pagination" />
       <p v-else-if="goods.length === 0 && route.path === '/category'" class="goods__empty">
         Категория не существует
+      </p>
+      <p v-else-if="storeGoods.status !== 'error' && route.path === '/search'" class="goods__empty">
+        По Вашему запросу ничего не найдено
       </p>
     </div>
   </section>

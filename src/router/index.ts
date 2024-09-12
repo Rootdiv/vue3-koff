@@ -9,7 +9,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'main',
-      alias: ['/category'],
+      alias: ['/category', '/search'],
       component: MainView,
     },
     {
