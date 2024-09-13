@@ -32,10 +32,15 @@ export const useCategoriesStore = defineStore('categories', {
         this.status = Status.SUCCESS;
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          console.error('Произошла ошибка запроса категорий:', error.message);
+          if (error.status === 401) {
+            auth.fetchAccessKey();
+            auth.$subscribe(this.getCategories);
+            return;
+          }
+          console.error('Ошибка запроса категорий:', error.message);
           this.error = error.message;
         } else {
-          console.error('Произошла ошибка запроса категорий:', error);
+          console.error('Ошибка запроса категорий:', error);
           this.error = error;
         }
         this.status = Status.ERROR;

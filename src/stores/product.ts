@@ -43,10 +43,16 @@ export const useProductStore = defineStore('product', {
         this.status = Status.SUCCESS;
       } catch (error) {
         if (axios.isAxiosError(error)) {
-          console.error('Произошла ошибка запроса:', error.message);
+          if (error.status === 401) {
+            auth.$subscribe(() => {
+              this.getProduct(id);
+            });
+            return;
+          }
+          console.error('Ошибка запроса товара:', error.message);
           this.error = error.message;
         } else {
-          console.error('Произошла ошибка запроса:', error);
+          console.error('Ошибка запроса товара:', error);
           this.error = error;
         }
         this.status = Status.ERROR;

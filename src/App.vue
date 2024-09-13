@@ -6,10 +6,12 @@
   import { useAuthStore } from '@/stores/auth';
   import { onBeforeMount } from 'vue';
 
-  const { fetchAccessKey } = useAuthStore();
+  const authStore = useAuthStore();
 
   onBeforeMount(() => {
-    fetchAccessKey();
+    if (authStore.accessKey === '') {
+      authStore.fetchAccessKey();
+    }
   });
 </script>
 
