@@ -47,8 +47,8 @@
           </table>
         </div>
         <div class="product__btns">
-          <AddCartButton class="product__btn" :id="product.id" />
-          <FavoritesButton class="product__favorites" :id="product.id" />
+          <AddCartButton class="product__btn" :productId="product.id" />
+          <FavoritesButton class="product__favorites" :productId="product.id" />
         </div>
       </div>
     </div>

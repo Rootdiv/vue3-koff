@@ -6,7 +6,7 @@
   import AddCartButton from '@/components/AddCartButton.vue';
   import FavoritesButton from '@/components/FavoritesButton.vue';
 
-  const { product } = defineProps<{ product: IProduct }>();
+  defineProps<{ product: IProduct }>();
 </script>
 
 <template>
@@ -22,8 +22,8 @@
       </h3>
       <p class="card__price">{{ priceFormat(product.price) }}</p>
     </div>
-    <AddCartButton class="card__btn" :id="product.id" />
-    <FavoritesButton class="card__favorites" :id="product.id" />
+    <AddCartButton class="card__btn" :productId="product.id" />
+    <FavoritesButton class="card__favorites" :productId="product.id" />
   </article>
 </template>
 

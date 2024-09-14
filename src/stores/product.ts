@@ -22,7 +22,7 @@ export const useProductStore = defineStore('product', {
       images: [],
       category: '',
     },
-    status: Status.LOADING,
+    status: Status.IDLE,
     error: null,
   }),
   actions: {

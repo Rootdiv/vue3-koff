@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import { ref } from 'vue';
   import { RouterLink, useRoute } from 'vue-router';
   import type { IPagination } from '@/stores/goods';
-  import { ref } from 'vue';
 
   const { pagination } = defineProps<{ pagination: IPagination }>();
   const route = useRoute();

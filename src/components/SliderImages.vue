@@ -1,6 +1,4 @@
 <script setup lang="ts">
-  const { images } = defineProps<{ images: string[] }>();
-
   import { ref } from 'vue';
   import { API_URL } from '@/const';
   import { Swiper as SwiperContainer, SwiperSlide } from 'swiper/vue';
@@ -11,13 +9,15 @@
   import 'swiper/css/navigation';
   import 'swiper/css/thumbs';
 
+  defineProps<{ images: string[] }>();
+
   const thumbsSwiper = ref<Swiper>();
   const setThumbsSwiper = (swiper: Swiper) => {
     thumbsSwiper.value = swiper;
   };
 
-  const prevButton = ref(null);
-  const nextButton = ref(null);
+  const prevButtonRef = ref(null);
+  const nextButtonRef = ref(null);
 </script>
 
 <template>
@@ -26,20 +26,20 @@
       :modules="[Navigation, Thumbs]"
       :thumbs="{ swiper: thumbsSwiper }"
       :navigation="{
-        prevEl: nextButton,
-        nextEl: prevButton,
+        prevEl: nextButtonRef,
+        nextEl: prevButtonRef,
       }"
       :spaceBetween="10"
       class="product__slider-main">
       <SwiperSlide class="product__slide" v-for="(image, i) in images" :key="i">
         <img :src="`${API_URL}/${image}`" class="product__image" />
       </SwiperSlide>
-      <button class="product__arrow product__arrow_prev" ref="prevButton">
+      <button class="product__arrow product__arrow_prev" ref="prevButtonRef">
         <svg width="32" height="32" class="product__arrow-svg">
           <use href="/img/sprite.svg#prev" />
         </svg>
       </button>
-      <button class="product__arrow product__arrow_next" ref="nextButton">
+      <button class="product__arrow product__arrow_next" ref="nextButtonRef">
         <svg width="32" height="32" class="product__arrow-svg">
           <use href="/img/sprite.svg#next" />
         </svg>

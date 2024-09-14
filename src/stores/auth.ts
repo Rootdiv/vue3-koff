@@ -15,7 +15,7 @@ interface IStateAuth extends IToken {
 export const useAuthStore = defineStore('auth', {
   state: (): IStateAuth => ({
     accessKey: localStorage.getItem('koff-vue-accessKey') || '',
-    status: Status.LOADING,
+    status: Status.IDLE,
     error: null,
   }),
   actions: {

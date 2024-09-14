@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { useFavoritesStore } from '@/stores/favorites';
 
-  const { id } = defineProps<{ id: number }>();
+  defineProps<{ productId: number }>();
 
   const store = useFavoritesStore();
 
@@ -17,8 +17,8 @@
 <template>
   <button
     type="button"
-    :class="['favorites', { favorites_active: store.isFavorites(id) }]"
-    @click="handleFavoritesClick(id)">
+    @click="handleFavoritesClick(productId)"
+    :class="['favorites', { favorites_active: store.isFavorites(productId) }]">
     <svg width="16" height="16" class="favorites__svg">
       <use href="/img/sprite.svg#favorites" />
     </svg>

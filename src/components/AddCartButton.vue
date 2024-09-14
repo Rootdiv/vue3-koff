@@ -2,11 +2,11 @@
   import { ref } from 'vue';
   import { useCartStore } from '@/stores/cart';
 
-  const props = defineProps<{ id: number }>();
+  const props = defineProps<{ productId: number }>();
 
   const cartStore = useCartStore();
 
-  const productInCart = ref(cartStore.inCart(props.id));
+  const productInCart = ref(cartStore.inCart(props.productId));
   const buttonDisabled = ref(cartStore.statusAddRemove);
 
   const handleAddToCart = (id: number) => {
@@ -18,13 +18,16 @@
   };
 
   cartStore.$subscribe(() => {
-    productInCart.value = cartStore.inCart(props.id);
+    productInCart.value = cartStore.inCart(props.productId);
     buttonDisabled.value = cartStore.statusAddRemove;
   });
 </script>
 
 <template>
-  <button type="button" :disabled="buttonDisabled === 'loading'" @click="handleAddToCart(props.id)">
+  <button
+    type="button"
+    @click="handleAddToCart(productId)"
+    :disabled="buttonDisabled === 'loading'">
     {{ productInCart ? 'Из корзины' : 'В корзину' }}
   </button>
 </template>

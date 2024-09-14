@@ -1,7 +1,7 @@
 <script setup lang="ts">
+  import { onMounted } from 'vue';
   import { RouterLink } from 'vue-router';
   import { useCartStore } from '@/stores/cart';
-  import { onMounted } from 'vue';
 
   const cartStore = useCartStore();
 

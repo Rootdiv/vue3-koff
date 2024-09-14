@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import CardItem from '@/components/CardItem.vue';
-  import { useGoodsStore } from '@/stores/goods';
   import { ref, onMounted, watch } from 'vue';
-  import { storeToRefs } from 'pinia';
   import { useRoute } from 'vue-router';
-  import PaginationElem from '@/components/PaginationElem.vue';
+  import { storeToRefs } from 'pinia';
+  import { useGoodsStore } from '@/stores/goods';
   import { useFavoritesStore } from '@/stores/favorites';
+  import CardItem from '@/components/CardItem.vue';
+  import PaginationElem from '@/components/PaginationElem.vue';
 
   const route = useRoute();
   const storeGoods = useGoodsStore();

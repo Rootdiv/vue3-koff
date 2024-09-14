@@ -13,7 +13,7 @@ interface IStateCategory {
 export const useCategoriesStore = defineStore('categories', {
   state: (): IStateCategory => ({
     categories: [],
-    status: Status.LOADING,
+    status: Status.IDLE,
     error: null,
   }),
   actions: {

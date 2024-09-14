@@ -2,11 +2,7 @@
   import { declOfNum } from '@/helpers/declOfNum';
   import { priceFormat } from '@/helpers/priceFormat';
 
-  const { totalCount, totalPrice, deliveryPrice } = defineProps<{
-    totalCount: number;
-    totalPrice: number;
-    deliveryPrice: number;
-  }>();
+  defineProps<{ totalCount: number; totalPrice: number; deliveryPrice: number }>();
 </script>
 
 <template>

@@ -29,7 +29,7 @@ export const useGoodsStore = defineStore('goods', {
   state: (): IStateGoods => ({
     goods: [],
     pagination: null,
-    status: Status.LOADING,
+    status: Status.IDLE,
     error: null,
   }),
   actions: {

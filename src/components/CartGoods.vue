@@ -12,10 +12,6 @@
 
   const isChanging = ref(false);
 
-  watch(props.goods, () => {
-    isChanging.value = false;
-  });
-
   const decrementButton = (id: number, quantity: number) => {
     isChanging.value = true;
     if (quantity > 1) {
@@ -29,6 +25,10 @@
     isChanging.value = true;
     props.updateProductInCard({ productId: id, quantity: quantity + 1 });
   };
+
+  watch(props.goods, () => {
+    isChanging.value = false;
+  });
 </script>
 
 <template>
