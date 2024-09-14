@@ -165,7 +165,7 @@ module.exports = {
         const: 'never',
       },
     ],
-    'operator-linebreak': ['error', 'before', { overrides: { '||': 'after', '&&': 'after' } }],
+    'operator-linebreak': ['error', 'after'],
     'padded-blocks': ['error', 'never'],
     'quote-props': ['error', 'as-needed'],
     quotes: [

@@ -5,6 +5,7 @@
   import { useProductStore } from '@/stores/product';
   import { priceFormat } from '@/helpers/priceFormat';
   import SliderImages from '@/components/SliderImages.vue';
+  import AddCartButton from '@/components/AddCartButton.vue';
   import FavoritesButton from '@/components/FavoritesButton.vue';
 
   const route = useRoute();
@@ -46,7 +47,7 @@
           </table>
         </div>
         <div class="product__btns">
-          <button class="product__btn" type="button" :data-id="product.id">В корзину</button>
+          <AddCartButton class="product__btn" :id="product.id" />
           <FavoritesButton class="product__favorites" :id="product.id" />
         </div>
       </div>

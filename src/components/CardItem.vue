@@ -3,6 +3,7 @@
   import { RouterLink } from 'vue-router';
   import type { IProduct } from '@/stores/types';
   import { priceFormat } from '@/helpers/priceFormat';
+  import AddCartButton from '@/components/AddCartButton.vue';
   import FavoritesButton from '@/components/FavoritesButton.vue';
 
   const { product } = defineProps<{ product: IProduct }>();
@@ -21,7 +22,7 @@
       </h3>
       <p class="card__price">{{ priceFormat(product.price) }}</p>
     </div>
-    <button class="card__btn" type="button" :data-id="product.id">В корзину</button>
+    <AddCartButton class="card__btn" :id="product.id" />
     <FavoritesButton class="card__favorites" :id="product.id" />
   </article>
 </template>
