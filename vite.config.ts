@@ -10,12 +10,19 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler',
+      },
+    },
+  },
   build: {
     rollupOptions: {
       output: {
         assetFileNames: (assetInfo) => {
           let subFolder = 'css';
-          const extType = assetInfo.name?.split('.').pop() || '';
+          const extType = assetInfo.names?.pop() || '';
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
             subFolder = 'images';
           } else if (/woff|woff2/i.test(extType)) {
