@@ -15,7 +15,7 @@
 </script>
 
 <template>
-  <nav class="catalog">
+  <nav v-if="route.path !== '/cart'" class="catalog">
     <div class="container catalog__container">
       <ul class="catalog__list">
         <li v-if="store.status === 'loading'" class="cart__loading">Загрузка...</li>
