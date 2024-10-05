@@ -18,7 +18,8 @@
   <nav class="catalog">
     <div class="container catalog__container">
       <ul class="catalog__list">
-        <li class="catalog__item" v-for="(category, index) in categories" :key="index">
+        <li v-if="store.status === 'loading'" class="cart__loading">Загрузка...</li>
+        <li v-else class="catalog__item" v-for="(category, index) in categories" :key="index">
           <RouterLink
             :class="['catalog__link', { ['catalog__link_active']: route.query.slug === category }]"
             :to="`/category?slug=${category}`">

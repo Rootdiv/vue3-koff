@@ -46,21 +46,22 @@
       <h2 :class="['goods__title', { 'visually-hidden': isHiddenTitle }]">
         {{ goodsTitle }}
       </h2>
-      <p v-if="storeGoods.status === 'error'" class="goods__error">
+      <p v-if="storeGoods.status === 'loading'" class="goods__loading">Загрузка товаров...</p>
+      <p v-else-if="storeGoods.status === 'error'" class="goods__error">
         Ошибка: {{ storeGoods.error }}
       </p>
-      <ul class="goods__list" v-if="goods.length">
-        <li class="goods__item" v-for="product in goods" :key="product.id">
-          <CardItem class="goods__card" :product="product" />
-        </li>
-      </ul>
-      <PaginationElem v-if="pagination && pagination.totalPages > 1" :pagination="pagination" />
-      <p v-else-if="goods.length === 0 && route.path === '/category'" class="goods__empty">
-        Категория не существует
-      </p>
-      <p v-else-if="storeGoods.status !== 'error' && route.path === '/search'" class="goods__empty">
-        По Вашему запросу ничего не найдено
-      </p>
+      <template v-else>
+        <ul class="goods__list" v-if="goods.length">
+          <li class="goods__item" v-for="product in goods" :key="product.id">
+            <CardItem class="goods__card" :product="product" />
+          </li>
+        </ul>
+        <PaginationElem v-if="pagination && pagination.totalPages > 1" :pagination="pagination" />
+        <p v-else-if="route.path === '/category'" class="goods__empty">Категория не существует</p>
+        <p v-else-if="route.path === '/search'" class="goods__empty">
+          По Вашему запросу ничего не найдено
+        </p>
+      </template>
     </div>
   </section>
 </template>
@@ -115,7 +116,8 @@
       }
     }
 
-    &__empty {
+    &__empty,
+    &__loading {
       padding-top: 50px;
       font-size: 16px;
       text-align: center;

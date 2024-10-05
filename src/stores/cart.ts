@@ -48,7 +48,7 @@ export const useCartStore = defineStore('cart', {
     totalPrice: 0,
     totalCount: 0,
     deliveryPrice: 500,
-    status: Status.LOADING,
+    status: Status.IDLE,
     statusAddRemove: Status.IDLE,
     statusUpdate: Status.IDLE,
     error: null,

@@ -13,7 +13,11 @@
   <section class="cart">
     <div class="container cart__container">
       <h2 class="cart__title">Корзина</h2>
-      <template v-if="cartStore.products.length">
+      <p v-if="cartStore.status === 'loading'" class="cart__loading">Загрузка корзины...</p>
+      <p v-else-if="cartStore.status === 'error'" class="cart__error">
+        Ошибка: {{ cartStore.error }}
+      </p>
+      <template v-else-if="cartStore.products.length">
         <CartGoods
           :goods="cartStore.products"
           :updateProductInCard="cartStore.updateProductInCard"
@@ -96,15 +100,22 @@
       }
     }
 
-    &__empty {
+    &__loading,
+    &__empty,
+    &__error {
       grid-column: 1 / -1;
       padding-top: 20px;
-      font-size: 16px;
+      font-size: 20px;
       text-align: center;
 
       @media (min-width: 880px) {
         padding-top: 0;
       }
+    }
+
+    &__error {
+      font-size: 16px;
+      text-align: unset;
     }
   }
 </style>
