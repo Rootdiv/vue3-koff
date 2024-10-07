@@ -1,75 +1,200 @@
 <script setup lang="ts">
-  import { ref } from 'vue';
+  import { ref, computed } from 'vue';
+  import useVuelidate from '@vuelidate/core';
+  import { helpers, required, email, minLength } from '@vuelidate/validators';
+  import { useFormCartStore } from '@/stores/formCart';
+  import type { IFormData } from '@/stores/formCart';
 
   const { changeDeliveryPrice } = defineProps<{
     changeDeliveryPrice(price: number): void;
   }>();
 
-  const addressInput = ref('');
+  const nameField = ref('');
+  const phoneField = ref('');
+  const emailField = ref('');
+  const addressField = ref('');
+  const commentsField = ref('');
   const deliveryTypeInput = ref('');
+  const paymentTypeInput = ref('');
+
+  const isNotEmpty = (value: string) => {
+    if (deliveryTypeInput.value === 'delivery') {
+      return value.trim() !== '';
+    }
+    return true;
+  };
+
+  const rules = computed(() => ({
+    nameField: {
+      required: helpers.withMessage('Это обязательное поле', required),
+      minLength: helpers.withMessage('Минимальная длина: 2 символа', minLength(2)),
+    },
+    phoneField: {
+      required: helpers.withMessage('Введите Ваш телефон', required),
+      minLength: helpers.withMessage('Минимальная длина: 5 символов', minLength(5)),
+    },
+    emailField: {
+      required: helpers.withMessage('Введите Ваш E-mail', required),
+      email: helpers.withMessage('Вы ввели неверный E-mail', email),
+    },
+    addressField: {
+      addressField: helpers.withMessage('Заполните поле адреса', isNotEmpty),
+      minLength: helpers.withMessage('Минимальная длина: 10 символов', minLength(10)),
+    },
+    deliveryTypeInput: {
+      required: helpers.withMessage('Выберете тип доставки', required),
+    },
+    paymentTypeInput: {
+      required: helpers.withMessage('Выберете способ оплаты', required),
+    },
+  }));
+
+  const validator = useVuelidate(rules, {
+    nameField,
+    phoneField,
+    emailField,
+    addressField,
+    deliveryTypeInput,
+    paymentTypeInput,
+  });
 
   const handleChangeDeliveryPrice = (newPrice: number) => {
     if (deliveryTypeInput.value === 'pickup') {
-      addressInput.value = '';
+      addressField.value = '';
     }
     changeDeliveryPrice(newPrice);
+  };
+
+  const storeFormCart = useFormCartStore();
+
+  const handleSubmitForm = ({ target }: Event) => {
+    const data = new FormData(target as HTMLFormElement);
+    const formData = Object.fromEntries(data) as unknown as IFormData;
+    validator.value.$touch();
+    if (!validator.value.$error) {
+      storeFormCart.submitCartForm(formData);
+    }
   };
 </script>
 
 <template>
-  <form id="order" method="POST" class="form-order">
+  <form id="order" class="form-order" @submit.prevent="handleSubmitForm">
     <h3 class="form-order__title">Данные для доставки</h3>
     <fieldset class="form-order__fieldset form-order__fieldset_input">
-      <input name="name" placeholder="Фамилия" class="form-order__input" required="true" />
-      <input name="phone" placeholder="Телефон" class="form-order__input" required="true" />
-      <input name="email" placeholder="E-mail" class="form-order__input" required="true" />
-      <input
-        name="address"
-        v-model="addressInput"
-        placeholder="Адрес доставки"
-        :required="deliveryTypeInput === 'delivery'"
-        :disabled="deliveryTypeInput === 'pickup'"
-        class="form-order__input" />
+      <label class="form-order__wrapper">
+        <input
+          name="name"
+          placeholder="Фамилия"
+          class="form-order__input"
+          v-model.trim="validator.nameField.$model" />
+        <span
+          class="form-order__error"
+          v-for="element of validator.nameField.$errors"
+          :key="element.$uid">
+          {{ element.$message }}
+        </span>
+      </label>
+      <label class="form-order__wrapper">
+        <input
+          name="phone"
+          placeholder="Телефон"
+          class="form-order__input"
+          v-model.trim="validator.phoneField.$model" />
+        <span
+          class="form-order__error"
+          v-for="element of validator.phoneField.$errors"
+          :key="element.$uid">
+          {{ element.$message }}
+        </span>
+      </label>
+      <label class="form-order__wrapper">
+        <input
+          name="email"
+          placeholder="E-mail"
+          class="form-order__input"
+          v-model.trim="validator.emailField.$model" />
+        <span
+          class="form-order__error"
+          v-for="element of validator.emailField.$errors"
+          :key="element.$uid">
+          {{ element.$message }}<br />
+        </span>
+      </label>
+      <label class="form-order__wrapper">
+        <input
+          name="address"
+          placeholder="Адрес доставки"
+          v-model.trim="validator.addressField.$model"
+          :disabled="deliveryTypeInput === 'pickup'"
+          class="form-order__input" />
+        <span
+          class="form-order__error"
+          v-for="element of validator.addressField.$errors"
+          :key="element.$uid">
+          {{ element.$message }}
+        </span>
+      </label>
       <textarea
         name="comments"
+        v-model.trim="commentsField"
         placeholder="Комментарий к заказу"
         class="form-order__textarea"></textarea>
     </fieldset>
     <fieldset class="form-order__fieldset form-order__fieldset_radio">
       <legend class="form-order__legend">Доставка</legend>
-      <label class="form-order__label radio">
+      <label class="form-order__label form-order__radio">
         Доставка
         <input
           @change="handleChangeDeliveryPrice(500)"
           type="radio"
           name="deliveryType"
           value="delivery"
-          required="true"
-          v-model="deliveryTypeInput"
-          class="radio__input" />
+          v-model.trim="validator.deliveryTypeInput.$model"
+          class="form-order__radio-input" />
       </label>
-      <label class="form-order__label radio">
+      <label class="form-order__label form-order__radio">
         Самовывоз
         <input
           @change="handleChangeDeliveryPrice(0)"
           type="radio"
           name="deliveryType"
           value="pickup"
-          required="true"
-          v-model="deliveryTypeInput"
-          class="radio__input" />
+          v-model.trim="validator.deliveryTypeInput.$model"
+          class="form-order__radio-input" />
       </label>
+      <div
+        class="form-order__error"
+        v-for="element of validator.deliveryTypeInput.$errors"
+        :key="element.$uid">
+        {{ element.$message }}
+      </div>
     </fieldset>
     <fieldset class="form-order__fieldset form-order__fieldset_radio">
       <legend class="form-order__legend">Оплата</legend>
-      <label class="form-order__label radio">
+      <label class="form-order__label form-order__radio">
         Картой при получении
-        <input type="radio" name="paymentType" value="card" required="true" class="radio__input" />
+        <input
+          type="radio"
+          name="paymentType"
+          value="card"
+          v-model.trim="validator.paymentTypeInput.$model"
+          class="form-order__radio-input" />
       </label>
-      <label class="form-order__label radio">
+      <label class="form-order__label form-order__radio">
         Наличными при получении
-        <input type="radio" name="paymentType" value="cash" required="true" class="radio__input" />
+        <input
+          type="radio"
+          name="paymentType"
+          value="cash"
+          v-model.trim="validator.paymentTypeInput.$model"
+          class="form-order__radio-input" />
       </label>
+      <div
+        class="form-order__error"
+        v-for="element of validator.paymentTypeInput.$errors"
+        :key="element.$uid">
+        {{ element.$message }}
+      </div>
     </fieldset>
   </form>
 </template>
@@ -183,72 +308,76 @@
         margin-bottom: 17px;
       }
     }
-  }
 
-  .radio {
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex-direction: row-reverse;
-    margin-bottom: 8px;
-    font-size: 12px;
-    line-height: 16px;
-
-    &:last-child {
-      margin-bottom: 0;
+    &__error {
+      color: #ff0000;
     }
 
-    &__input {
+    &__radio {
       position: relative;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      padding: 2px;
-      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      flex-direction: row-reverse;
+      margin-bottom: 8px;
+      font-size: 12px;
+      line-height: 16px;
 
-      &:before {
-        content: '';
-        display: block;
-        width: 12px;
-        height: 12px;
-        background-color: #ffffff;
-        border: 1px solid #000000;
-        border-radius: 8px;
+      &:last-child {
+        margin-bottom: 0;
       }
 
-      &:after {
-        content: '';
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 4px;
-        height: 4px;
-        background-color: #151515;
-        border-radius: 50%;
-        opacity: 0;
-      }
-
-      &:focus-visible {
-        outline: none;
+      &-input {
+        position: relative;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        padding: 2px;
+        margin-right: 8px;
 
         &:before {
-          box-shadow: 0px 0px 10px rgba(120, 0, 150, 0.5);
+          content: '';
+          display: block;
+          width: 12px;
+          height: 12px;
+          background-color: #ffffff;
+          border: 1px solid #000000;
+          border-radius: 8px;
         }
-      }
 
-      &:checked:after {
-        opacity: 1;
-      }
-
-      &:hover {
-        &:not(:disabled):before {
-          box-shadow: 0px 0px 10px rgba(120, 0, 150, 0.5);
+        &:after {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 4px;
+          height: 4px;
+          background-color: #151515;
+          border-radius: 50%;
+          opacity: 0;
         }
-      }
 
-      &:disabled:before {
-        background-color: #cccccc;
+        &:focus-visible {
+          outline: none;
+
+          &:before {
+            box-shadow: 0px 0px 10px rgba(120, 0, 150, 0.5);
+          }
+        }
+
+        &:checked:after {
+          opacity: 1;
+        }
+
+        &:hover {
+          &:not(:disabled):before {
+            box-shadow: 0px 0px 10px rgba(120, 0, 150, 0.5);
+          }
+        }
+
+        &:disabled:before {
+          background-color: #cccccc;
+        }
       }
     }
   }
