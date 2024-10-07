@@ -13,6 +13,7 @@ const router = createRouter({
     {
       // Если :id не передан, возвращаем на главную
       path: '/product',
+      alias: '/order',
       redirect: '/',
     },
     {
@@ -30,6 +31,11 @@ const router = createRouter({
       path: '/cart',
       name: 'cart',
       component: () => import('@/views/CartView.vue'),
+    },
+    {
+      path: '/order/:id(\\d+)',
+      name: 'order',
+      component: () => import('@/views/OrderView.vue'),
     },
   ],
 });

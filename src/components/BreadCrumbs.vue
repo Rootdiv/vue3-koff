@@ -15,6 +15,7 @@
     v-if="
       route.path !== '/' &&
       route.name !== 'cart' &&
+      route.name !== 'order' &&
       storeProduct.status !== 'loading' &&
       storeProduct.status !== 'error'
     ">

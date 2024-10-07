@@ -8,6 +8,16 @@ export interface IProduct {
   category: string;
 }
 
+export interface IFormData {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  comments: string;
+  deliveryType: string;
+  paymentType: string;
+}
+
 export const enum Status {
   IDLE = 'idle',
   LOADING = 'loading',

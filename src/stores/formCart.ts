@@ -2,17 +2,7 @@ import axios from 'axios';
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/stores/auth';
 import { API_URL } from '@/const';
-import { Status } from '@/stores/types';
-
-export interface IFormData {
-  name: string;
-  phone: string;
-  email: string;
-  address: string;
-  comments: string;
-  deliveryType: string;
-  paymentType: string;
-}
+import { Status, type IFormData } from '@/stores/types';
 
 interface IStateCart {
   orderId: number;

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
+  import { ref, computed, watch } from 'vue';
   import useVuelidate from '@vuelidate/core';
   import { helpers, required, email, minLength } from '@vuelidate/validators';
   import { useFormCartStore } from '@/stores/formCart';
-  import type { IFormData } from '@/stores/formCart';
+  import { useRouter } from 'vue-router';
+  import type { IFormData } from '@/stores/types';
 
   const { changeDeliveryPrice } = defineProps<{
     changeDeliveryPrice(price: number): void;
@@ -16,6 +17,8 @@
   const commentsField = ref('');
   const deliveryTypeInput = ref('');
   const paymentTypeInput = ref('');
+
+  const router = useRouter();
 
   const isNotEmpty = (value: string) => {
     if (deliveryTypeInput.value === 'delivery') {
@@ -75,6 +78,12 @@
       storeFormCart.submitCartForm(formData);
     }
   };
+
+  watch(storeFormCart, () => {
+    if (storeFormCart.orderId) {
+      router.push({ name: 'order', params: { id: storeFormCart.orderId } });
+    }
+  });
 </script>
 
 <template>
