@@ -192,5 +192,11 @@ export const useCartStore = defineStore('cart', {
     changeDeliveryPrice(price: number) {
       this.deliveryPrice = price;
     },
+    clearCart() {
+      this.products = [];
+      this.totalPrice = 0;
+      this.totalCount = 0;
+      this.status = Status.IDLE;
+    },
   },
 });

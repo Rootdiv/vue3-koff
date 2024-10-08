@@ -50,18 +50,18 @@
       <p v-else-if="storeGoods.status === 'error'" class="goods__error">
         Ошибка: {{ storeGoods.error }}
       </p>
-      <template v-else>
-        <ul class="goods__list" v-if="goods.length">
+      <template v-else-if="goods.length">
+        <ul class="goods__list">
           <li class="goods__item" v-for="product in goods" :key="product.id">
             <CardItem class="goods__card" :product="product" />
           </li>
         </ul>
         <PaginationElem v-if="pagination && pagination.totalPages > 1" :pagination="pagination" />
-        <p v-else-if="route.path === '/category'" class="goods__empty">Категория не существует</p>
-        <p v-else-if="route.path === '/search'" class="goods__empty">
-          По Вашему запросу ничего не найдено
-        </p>
       </template>
+      <p v-else-if="route.path === '/category'" class="goods__empty">Категория не существует</p>
+      <p v-else-if="route.path === '/search'" class="goods__empty">
+        По Вашему запросу ничего не найдено
+      </p>
     </div>
   </section>
 </template>

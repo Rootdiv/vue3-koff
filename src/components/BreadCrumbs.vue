@@ -1,24 +1,32 @@
 <script setup lang="ts">
+  import { ref, watch } from 'vue';
   import { storeToRefs } from 'pinia';
   import { RouterLink, useRoute } from 'vue-router';
   import { useProductStore } from '@/stores/product';
 
   const route = useRoute();
   const storeProduct = useProductStore();
+  const textBreadcrumbs = ref('');
 
   const { product } = storeToRefs(storeProduct);
+
+  watch(route, () => {
+    if (route.query.slug || route.query.q) {
+      textBreadcrumbs.value = String(route.query.slug || route.query.q);
+    } else if (route.path === '/favorites') {
+      textBreadcrumbs.value = 'Избранное';
+    } else if (route.name === 'product') {
+      textBreadcrumbs.value = 'Товар';
+    } else {
+      textBreadcrumbs.value = '';
+    }
+  });
 </script>
 
 <template>
   <div
     class="breadcrumbs"
-    v-if="
-      route.path !== '/' &&
-      route.name !== 'cart' &&
-      route.name !== 'order' &&
-      storeProduct.status !== 'loading' &&
-      storeProduct.status !== 'error'
-    ">
+    v-if="textBreadcrumbs && storeProduct.status !== 'loading' && storeProduct.status !== 'error'">
     <div class="container">
       <ul class="breadcrumbs__list">
         <li class="breadcrumbs__item">
@@ -33,7 +41,7 @@
         </li>
         <li class="breadcrumbs__item">
           <span class="breadcrumbs__link">
-            {{ product.name || route.query.slug || (route.query.q && 'Поиск') || 'Избранное' }}
+            {{ product.name || textBreadcrumbs }}
           </span>
         </li>
       </ul>

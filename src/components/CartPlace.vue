@@ -14,7 +14,7 @@
       </p>
       <p class="place__price">{{ priceFormat(totalPrice) }}</p>
     </div>
-    <p class="place__delivery">Доставка {{ deliveryPrice }} &nbsp;&#8381;</p>
+    <p class="place__delivery">Доставка {{ deliveryPrice }}&nbsp;&#8381;</p>
     <button type="submit" form="order" class="place__btn">Оформить заказ</button>
   </div>
 </template>

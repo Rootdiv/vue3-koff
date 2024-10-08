@@ -73,6 +73,7 @@
   const handleSubmitForm = ({ target }: Event) => {
     const data = new FormData(target as HTMLFormElement);
     const formData = Object.fromEntries(data) as unknown as IFormData;
+    console.log('formData: ', formData);
     validator.value.$touch();
     if (!validator.value.$error) {
       storeFormCart.submitCartForm(formData);

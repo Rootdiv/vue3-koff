@@ -1,12 +1,14 @@
 <script setup lang="ts">
-  import { ref, onMounted, watch } from 'vue';
+  import { ref, onMounted, watch, onBeforeMount } from 'vue';
   import { useRoute } from 'vue-router';
   import { useOrderStore } from '@/stores/order';
   import { storeToRefs } from 'pinia';
   import { priceFormat } from '@/helpers/priceFormat';
+  import { useCartStore } from '@/stores/cart';
 
   const route = useRoute();
   const orderStore = useOrderStore();
+  const cartStore = useCartStore();
 
   const orderId = ref('');
   const totalPrice = ref(0);
@@ -14,6 +16,10 @@
   const deliveryType = ref('');
 
   orderId.value = String(route.params.id);
+
+  onBeforeMount(() => {
+    cartStore.clearCart();
+  });
 
   onMounted(() => {
     orderStore.getOrder(orderId.value);

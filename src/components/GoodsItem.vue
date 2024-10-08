@@ -27,30 +27,36 @@
 <template>
   <section class="product">
     <div class="container product__container">
-      <h2 class="product__title">{{ product.name }}</h2>
-      <SliderImages :images="product.images" />
-      <div class="product__info">
-        <p class="product__price">{{ priceFormat(product.price) }}</p>
-        <p class="product__article">арт.&nbsp;{{ product.article }}</p>
-        <div class="product__characteristics">
-          <h3 class="product__characteristics-title">Общие характеристики</h3>
-          <table class="product__characteristics-table table">
-            <tbody>
-              <tr
-                class="table__row"
-                v-for="([filed, value], i) in product.characteristics"
-                :key="i">
-                <td class="table__field">{{ filed }}</td>
-                <td class="table__value">{{ value }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="product__btns">
-          <AddCartButton class="product__btn" :productId="product.id" />
-          <FavoritesButton class="product__favorites" :productId="product.id" />
-        </div>
+      <div v-if="storeProduct.status === 'loading'" class="product__loading">
+        Загрузка информации о товаре
       </div>
+      <template v-else-if="storeProduct.status === 'success'">
+        <h2 class="product__title">{{ product.name }}</h2>
+        <SliderImages :images="product.images" />
+        <div class="product__info">
+          <p class="product__price">{{ priceFormat(product.price) }}</p>
+          <p class="product__article">арт.&nbsp;{{ product.article }}</p>
+          <div class="product__characteristics">
+            <h3 class="product__characteristics-title">Общие характеристики</h3>
+            <table class="product__characteristics-table table">
+              <tbody>
+                <tr
+                  class="table__row"
+                  v-for="([filed, value], i) in product.characteristics"
+                  :key="i">
+                  <td class="table__field">{{ filed }}</td>
+                  <td class="table__value">{{ value }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="product__btns">
+            <AddCartButton class="product__btn" :productId="product.id" />
+            <FavoritesButton class="product__favorites" :productId="product.id" />
+          </div>
+        </div>
+      </template>
+      <div v-else class="product__empty">Товар не найден</div>
     </div>
   </section>
 </template>
@@ -152,6 +158,7 @@
       height: 16px;
     }
 
+    &__loading,
     &__empty {
       grid-column: 1 / -1;
       padding-top: 50px;
